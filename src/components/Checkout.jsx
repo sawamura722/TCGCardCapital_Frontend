@@ -110,6 +110,7 @@ const Checkout = () => {
             // Get the updated user profile and current points
             const userProfile = await profilesService.getUserById(userId);
             const currentPoints = userProfile.point;
+            const isSubscribed = userProfile.subscriptionStatus;
 
             // Get rewards and claimed rewards
             const rewards = await rewardsService.getRewards();
@@ -126,10 +127,11 @@ const Checkout = () => {
 
             // Claim eligible rewards based on subscription status
             const eligibleRewards = rewards.filter(reward => 
-                (isSubscribed || !reward.isExtraReward) &&
-                currentPoints >= reward.pointsRequired &&
-                !claimedRewardIds.has(reward.rewardId)
+                (isSubscribed || !reward.isExtraReward) &&  // Allow extra rewards for subscribed users
+                currentPoints >= reward.pointsRequired &&  // User must have enough points
+                !claimedRewardIds.has(reward.rewardId)  // Reward must not be already claimed
             );
+            
 
             const congratulationsPromises = eligibleRewards.map(async (reward) => {
                 const rewardForm = new FormData();

@@ -79,7 +79,9 @@ const AdminDashboard = () => {
             const totalRevenue = orders.reduce((acc, order) => acc + order.totalAmount, 0);
             setTotalRevenue(totalRevenue);
 
-            setLatestOrders(orders.slice(-5));
+             // Sort orders by orderDate in descending order and then slice to get the latest 5
+            const sortedOrders = orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+            setLatestOrders(sortedOrders.slice(0, 5)); // Get the last 5 orders
         } catch (error) {
             console.error('Error fetching order data:', error);
             throw error;
@@ -90,24 +92,43 @@ const AdminDashboard = () => {
         try {
             const products = await productsService.getProducts();
             setTotalProducts(products.length);
-
+    
             const categories = await productsService.getCategories();
             setCategories(categories);
-
+    
+            // Get order details to calculate sales by category
+            const orderDetails = await ordersService.getOrderDetails();
+    
+            // Calculate sales by category
             const salesByCategory = categories.map(category => {
-                const sales = products.filter(product => product.categoryId === category.categoryId)
-                    .reduce((acc, product) => acc + product.stock, 0);
-                return { name: category.categoryName, sales };
+                // Filter products that belong to the current category
+                const categoryProducts = products.filter(product => product.categoryId === category.categoryId);
+                
+                // Calculate total sales for this category by summing up quantities sold in OrderDetails
+                const categorySales = orderDetails
+                    .filter(detail => categoryProducts.some(product => product.productId === detail.productId))
+                    .reduce((acc, detail) => acc + detail.quantity, 0);
+    
+                return { name: category.categoryName, sales: categorySales };
             });
+            
             setSalesByCategory(salesByCategory);
-
-            const bestsellers = products.sort((a, b) => b.stock - a.stock).slice(0, 5);
+    
+            // Calculate bestsellers based on quantities sold
+            const bestsellers = products.map(product => {
+                const totalSold = orderDetails
+                    .filter(detail => detail.productId === product.productId)
+                    .reduce((acc, detail) => acc + detail.quantity, 0);
+                return { ...product, totalSold };
+            }).sort((a, b) => b.totalSold - a.totalSold).slice(0, 5);
+    
             setBestsellers(bestsellers);
         } catch (error) {
             console.error('Error fetching product data:', error);
             throw error;
         }
     };
+    
 
     const fetchUserData = async () => {
         try {
@@ -231,7 +252,7 @@ const AdminDashboard = () => {
                             <ul>
                                 {bestsellers.map((product, index) => (
                                     <li key={index}>
-                                        {product.productName}: {product.stock} sold
+                                        {product.productName}: {product.totalSold} sold
                                     </li>
                                 ))}
                             </ul>

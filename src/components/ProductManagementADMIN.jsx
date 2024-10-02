@@ -82,7 +82,9 @@ const ProductManagementADMIN = () => {
                 Description: data.description,
                 Price: data.price,
                 Stock: data.stock,
-                CategoryId: data.categoryId
+                CategoryId: data.categoryId,
+                ImageUrl: data.imageUrl
+
             });
             setMode('edit');
         } catch (err) {
@@ -390,6 +392,20 @@ const ProductManagementADMIN = () => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="Image" className="form-label">Product Image</label>
+                                
+                                {/* Display the current image if editing and imageUrl exists */}
+                                {formData.ImageUrl && (
+                                    <div className="mb-3">
+                                        <img 
+                                            src={`https://localhost:7104/uploads/${formData.ImageUrl}`} 
+                                            alt="Current Product Image" 
+                                            style={{ width: '100px', height: 'auto' }} 
+                                            className="img-thumbnail"
+                                        />
+                                    </div>
+                                )}
+                                
+                                {/* File input for uploading a new image */}
                                 <input type="file" className="form-control" onChange={(e) => setImageFile(e.target.files[0])} />
                             </div>
                             <button type="submit" className="btn btn-success">{mode === 'edit' ? 'Update' : 'Create'}</button>

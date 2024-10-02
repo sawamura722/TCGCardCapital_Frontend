@@ -133,6 +133,9 @@ class OrdersService {
             }
         });
 
+        const responseText = await response.text();
+        console.log('Delete response:', responseText); // Log the response text
+
         if (!response.ok) {
             const errorText = await response.text(); // Get response text for better error messages
             console.error('Delete failed:', errorText);

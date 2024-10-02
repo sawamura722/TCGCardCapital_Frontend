@@ -95,6 +95,13 @@ const RewardList = ({ limit }) => {
                                     <h5 className="card-title">{reward.rewardName}</h5>
                                     <p className="card-text">{reward.description || 'No description available'}</p>
                                     <p className="card-text">Points Required: {reward.pointsRequired}</p>
+                                     {/* Display if the reward is an extra reward for subscribers */}
+                                    <p className="card-text">
+                                        For Subscriber? : 
+                                        <span className={reward.isExtraReward ? "text-success" : "text-muted"}>
+                                            {reward.isExtraReward ? "Yes" : "No"}
+                                        </span>
+                                    </p>
                                     {claimedRewards.includes(reward.rewardId) && (
                                         <span className="badge bg-success">Claimed</span> // Indicate that the reward is claimed
                                     )}
