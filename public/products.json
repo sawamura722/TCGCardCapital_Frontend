@@ -1,0 +1,43 @@
+[
+    {
+        "id": "1",
+        "title": "Venusaur ex",
+        "image": "img/products/1.png",
+        "additionalImages": [
+            "img/products/1.png"
+            
+        ],
+        "description": "Venusaur ex",
+        "price": 49.99
+    },
+    {
+        "id": "2",
+        "title": "Dachsbun ex",
+        "image": "img/products/2.png",
+        "additionalImages": [
+            "img/products/2.png"
+        ],
+        "description": "Dachsbun ex",
+        "price": 19.99
+    },
+    {
+        "id": "3",
+        "title": "Raging Bolt",
+        "image": "img/products/3.png",
+        "additionalImages": [
+            "img/products/3.png"
+        ],
+        "description": "Raging Bolt",
+        "price": 24.99
+    },
+    {
+        "id": "4",
+        "title": "Crabominable",
+        "image": "img/products/4.png",
+        "additionalImages": [
+            "img/products/4.png"
+        ],
+        "description": "Crabominable , 34.99$",
+        "price": 34.99
+    }
+]
